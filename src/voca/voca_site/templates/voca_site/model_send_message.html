@@ -1,0 +1,29 @@
+{% load mytags %}
+{% load widget_tweaks %}
+<div class="modal fade" id={{model_id}} tabindex="-1" role="dialog" aria-labelledby="Message" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">发送消息</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ action_url }}" method='POST'>
+        {% csrf_token %}
+          <p class="lead">发送给{{friend_name}}的消息：</p>
+          <div>
+            <label for="message-text" class="col-form-label">消息：</label>
+            {% render_field message_form.message class="form-control" id="message-text" %}
+          </div>
+          <div class="modal-footer">
+        	<button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+        	<button type="submit" class="btn btn-primary">发送</button>
+     	 </div>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+</div>

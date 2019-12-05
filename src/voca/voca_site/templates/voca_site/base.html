@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    {% block bootstrap_version_css %}
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+	{% endblock %}
+	<link href="/static/myCss/navbar/fixed_to_top.css" rel="stylesheet">
+	<link href="https://cdn.bootcss.com/open-iconic/1.1.1/font/css/open-iconic-bootstrap.css" rel="stylesheet">
+	<!-- Latest compiled and minified CSS -->
+
+	<link href="https://cdn.bootcss.com/bootstrap-select/1.12.4/css/bootstrap-select.min.css" rel="stylesheet">
+	
+	
+	{% block additional_links %}
+		<link href="/static/myCss/footbar/stick_footbar.css" rel="stylesheet">
+	{% endblock %}
+	
+
+    <title>{% block title_text %}Voca{% endblock %}</title>
+    {% block extra_style %}
+    {% endblock %}
+  </head>
+  <body>
+    {% block body %}
+	    {% block navbar %}
+	    	{% include "voca_site/navbar.html" %}
+	    {% endblock %}
+	    {% block center_content %}
+	    {% endblock %}
+	    {% block footbar %}
+	    	{% include "voca_site/footbar.html" %}
+	    {% endblock %}
+    {% endblock %}
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.min.js"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.14.3/popper.min.js"></script>
+    {% block bootstrap_version_js %}
+    <<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  	{% endblock %}
+	<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+
+	<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+	<script>
+	$(function () {
+		  $('[data-toggle="popover"]').popover()
+		})
+	$('.popover-dismiss').popover({
+  		trigger: 'focus'
+	})
+</script>
+  </body>
+</html>

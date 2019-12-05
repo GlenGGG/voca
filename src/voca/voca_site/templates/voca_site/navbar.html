@@ -1,0 +1,60 @@
+{% load mytags %}
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+	<a class="navbar-brand" href="{% url 'cover' %}">Voca</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse"
+		data-target="#navbarsExampleDefault"
+		aria-controls="navbarsExampleDefault" aria-expanded="false"
+		aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+
+	<div class="collapse navbar-collapse" id="navbar_">
+		<form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method="GET">
+			<input class="form-control mr-sm-2" type="text" placeholder="Search"
+				aria-label="Search" name="search_text_" required="required">
+			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+		</form>
+		<ul class="navbar-nav ml-auto px-5 mr-5">
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" href="#"
+				id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
+				aria-expanded="false"><span class="oi oi-person" title="pserson" aria-hidden="true"></span></a>
+				<div class="dropdown-menu " aria-labelledby="dropdown01">
+					{% if user.is_authenticated %}
+					<a class="dropdown-item" href="{{ user.my_pspage.get_absolut_url }}">个人页</a>
+					{% else %}
+					<a class="dropdown-item" href="{% url 'signin' %}">个人页</a>
+					{% endif %}
+					{% if user.is_authenticated %}
+					<a class="dropdown-item" href="{{ request.user.get_change_password_url }}">修改密码</a>
+					<a class="dropdown-item" href="{% url 'logout' %}">登出</a>
+					{% else %}
+					<a class="dropdown-item" href="{% url 'signin' %}">登入</a>
+					<a class="dropdown-item" href="{% url 'signup' %}">注册</a>
+					{% endif %}
+				</div>
+			</li>
+			{% if user.is_authenticated %}
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle mr-5" href="#"
+				id="dropdown02" data-toggle="dropdown" aria-haspopup="true"
+				aria-expanded="false"><span class="oi oi-people" title="people" aria-hidden="true"></span></a>
+				<div class="dropdown-menu " aria-labelledby="dropdown02">
+					{% if user.is_authenticated %}
+					<a class="dropdown-item" href="{{ user.my_pspage.get_friend_url }}">好友<span class="badge badge-primary badge-pill">{{request.user.friend.all.count}}</span></a>
+					<a class="dropdown-item" href="{{ user.my_pspage.get_message_url }}">消息<span class="badge badge-primary badge-pill">{{request.user.my_pspage.get_message_set|get_unread_message_num}}</span></a>
+					<a class="dropdown-item" href="{{ user.my_pspage.get_visitor_detail_url }}">我的访客<span class="badge badge-info">{{request.user.my_pspage.visitor.all.count}}</span></a>
+					{% endif %}
+				</div>
+			</li>
+			{% else %}
+			<li class="nav-item"><a class="nav-link disabled" href="#"><span class="oi oi-people" title="people" aria-hidden="true"></span></a>
+			{% endif %}
+
+			
+			</li>
+			
+		</ul>
+
+	</div>
+</nav>

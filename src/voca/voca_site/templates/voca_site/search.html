@@ -1,0 +1,88 @@
+{% extends 'voca_site/base.html' %}
+
+{% load mytags %}
+{% block center_content %}
+	<main role="main">
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <div class="container mx-auto">
+          <h1 class="display-3">搜索结果</h1>
+        </div>
+      </div>
+		
+      <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+          <div class="col-md-8">
+          	<div class="card flex-md-row mb-4 box-shadow h-md-250">
+			    <div class="card-body flex-column p-5">
+			      <h1 class="card-title pb-7"><mark>"{{search_text}}"的搜索结果</mark></h1>
+			      {% if results %}
+			      {% for result in results %}
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item"></li>
+			      <li class="list-group-item"><p class="card-text lead">{{ result.name }}</p></li>
+			      
+			      <li class="list-group-item">{{ result.email }}</li>
+			      <table class="table table-sm mx-1">
+					  <thead>
+					    <tr>
+					   	 <th scope="col">ID</th>
+					      <th scope="col">院校</th>
+					      <th scope="col">公司</th>
+					      <th scope="col">部门</th>
+					      <th scope="col">职位</th>
+					      <th scope="col">地点</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					    <tr>
+					    <td>{{result.id}}</td>
+					      <td>{{result.univs_name}}</td>
+					      <td>{{result.firm}}</td>
+					      <td>{{result.department}}</td>
+					      <td>{{result.position_name}}</td>
+					      <td>{{result.location}}</td>
+					    </tr>
+					  </tbody>
+					</table>
+			      	<li class="list-group-item">
+					  <a href="{{ result.pspage_id|get_pspage_url_with_id }}" class="btn btn-secondary">查看他的个人页</a>
+			      	</li>
+			      {% endfor %}
+			      
+			      </ul>
+			      {% else %}
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item">没有搜索到结果</li>
+			      </ul>
+			      
+			      {% endif %}
+			    </div>
+			 </div>
+				<ul class="pagination">
+				        {% if results.has_previous %}
+				            <li class="list-group-item"><a href="?search_text_=1&page={{ results.previous_page_number }}">前一页</a></li>
+				        {% endif %}
+						{% for cnt in results.paginator.page_range %}
+						{% if cnt != results.number %}
+						<li class="page-item"><a class="page-link" href="?search_text_=1&?page={{ cnt }}">{{forloop.counter}}</a></li>
+						{% else %}
+						<li class="page-item active"><a class="page-link" href="?search_text_=1&page={{ cnt }}">{{forloop.counter}}</a></li>
+						{% endif %}
+						{% endfor %}
+				        {% if results.has_next %}
+				            <li class="list-group-item"><a href="?search_text_=1&page={{ results.next_page_number }}">后一页</a></li>
+				        {% endif %}
+				</ul>
+			</div>
+			{% if request.user.is_authenticated %}
+			{% include "voca_site/common_side_user_info.html" %}
+			{% endif %}
+			
+			</div>
+
+      </div> <!-- /container -->
+		
+    </main>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'voca_site/base.html' %}
+
+{% load mytags %}
+{% block center_content %}
+	<main role="main">
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <div class="container mx-auto">
+          <h1 class="display-3">{{ pspage.user.name }}收到的的消息</h1>
+        </div>
+      </div>
+		
+      <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+          <div class="col-md-8">
+          	<div class="card flex-md-row mb-4 box-shadow h-md-250">
+			    <div class="card-body flex-column p-5">
+			      <h1 class="card-title pb-7"><mark>你的消息</mark></h1>
+			      {% if messages %}
+			      {% for message in messages %}
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item"><p class="card-text lead">{{ message|show_message_read_str }}</p></li>
+			      <li class="list-group-item"><p class="card-text">来自{{ message.message_sender.name }}的消息</p></li>
+			      <li class="list-group-item">{{ message.message_sender.my_pspage.email }}</li>
+			      <li class="list-group-item">发送时间：{{ message.message_sent_time }}</li>
+			      {% if message|message_check_friend_apply:friend_apply_key == True %}
+			      <li class="list-group-item">
+			      	<p class="">这是一条好友申请消息：</p>
+			      	<form action="{{ pspage|get_confirm_friend_apply_url:message }}" method='POST'>
+					  	{% csrf_token %}
+					  <button type="submit" class="btn btn-success">确认添加</button>
+					</form>
+			      </li>
+			      {% else %}
+			      <li class="list-group-item"><p class="">消息内容：</p><p class="card-text">{{ message.message }}</p></li>
+			      {% endif %}
+			      	<li class="list-group-item">
+					<span class="btn-group pt-2">
+					  <button type="button" class="btn btn-primary " data-toggle="modal" data-target={{message.message_sender.id|get_model_send_message_target}}>回复消息</button>
+					  <a href="{{ message.message_sender.my_pspage.get_absolut_url }}" class="btn btn-secondary">查看发送者的个人页</a>
+					  {% if message.message_read == False %}
+					  <form action="{{ pspage|get_message_read_url:message.id}}" method='POST'>
+					  	{% csrf_token %}
+					  <button type="submit" class="btn btn-success">设置已读</button>
+					  </form>
+					  {% else %}
+					  <form action="{{ pspage|get_message_to_read_url:message.id}}" method='POST'>
+					  	{% csrf_token %}
+					  <button type="submit" class="btn btn-secondary">设置未读</button>
+					  </form>
+					  {% endif %}
+					  <button type="button" class="btn btn-danger " data-toggle="modal" data-target={{message.id|get_model_delete_message_target}}>删除消息</button>
+					</span>
+			      	</li>
+			      	<li class="list-group-item"><p></p></li>
+			      {% include "voca_site/model_delete_confirm.html" with model_id=message.id|get_model_delete_message_id title="删除消息确认" body_content="你确认要删除吗" action_url=pspage|get_message_delete_url:message.id %}
+			      {% include "voca_site/model_send_message.html" with model_id=message.message_sender.id|get_model_send_message_id action_url=pspage|get_send_message_url:message.message_sender.id friend_name=message.message_sender.name message_form=message_forms|get_message_form:forloop.counter %}
+			      
+			      {% endfor %}
+			      
+			      </ul>
+			      {% else %}
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item">暂无消息</li>
+			      </ul>
+			      
+			      {% endif %}
+			    </div>
+			 </div>
+				<ul class="pagination">
+				        {% if messages.has_previous %}
+				            <li class="list-group-item"><a href="?page={{ messages.previous_page_number }}">前一页</a></li>
+				        {% endif %}
+						{% for cnt in messages.paginator.page_range %}
+						{% if cnt != messages.number %}
+						<li class="page-item"><a class="page-link" href="?page={{ cnt }}">{{forloop.counter}}</a></li>
+						{% else %}
+						<li class="page-item active"><a class="page-link" href="?page={{ cnt }}">{{forloop.counter}}</a></li>
+						{% endif %}
+						{% endfor %}
+				        {% if messages.has_next %}
+				            <li class="list-group-item"><a href="?page={{ messages.next_page_number }}">后一页</a></li>
+				        {% endif %}
+				</ul>
+			</div>
+			{% include "voca_site/common_side_user_info.html" %}
+			
+			</div>
+
+      </div> <!-- /container -->
+		
+    </main>
+{% endblock %}

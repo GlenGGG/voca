@@ -1,0 +1,69 @@
+{% extends 'voca_site/base.html' %}
+
+{% load mytags %}
+{% block center_content %}
+	<main role="main">
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <div class="container mx-auto">
+          <h1 class="display-3">{{ pspage.user.name }}的朋友们</h1>
+        </div>
+      </div>
+		
+      <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+          <div class="col-md-8">
+          	<div class="card flex-md-row mb-4 box-shadow h-md-250">
+			    <div class="card-body flex-column p-5">
+			      <h1 class="card-title pb-7"><mark>你的好友</mark></h1>
+			      {% if friends %}
+			      {% for friend in friends %}
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item"><p class="card-text lead">{{ friend.name }}</p></li>
+			      <li class="list-group-item">{{ friend.my_pspage.email }}</li>
+			      	<li class="list-group-item">
+					<span class="btn-group pt-2">
+					  <button type="button" class="btn btn-primary " data-toggle="modal" data-target={{friend.id|get_model_send_message_target}}>发个消息</button>
+					  <a href="{{ friend.my_pspage.get_absolut_url }}" class="btn btn-secondary">查看他的个人页</a>
+					  <button type="button" class="btn btn-danger " data-toggle="modal" data-target={{friend.id|get_model_delete_friend_target}}>删除好友</button>
+					</span>
+			      	</li>
+			      {% include "voca_site/model_delete_confirm.html" with model_id=friend.id|get_model_delete_friend_id title="删除好友确认" body_content="你确认要删除吗" action_url=pspage|get_friend_delete_url:friend.id %}
+			      {% include "voca_site/model_send_message.html" with model_id=friend.id|get_model_send_message_id action_url=pspage|get_send_message_url:friend.id friend_name=friend.name message_form=message_forms|get_message_form:forloop.counter %}
+			      
+			      {% endfor %}
+			      
+			      </ul>
+			      {% else %}
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item">哦， 你还没有添加朋友呢，快去添加吧，你可以通过搜索来找到朋友。</li>
+			      </ul>
+			      
+			      {% endif %}
+			    </div>
+			 </div>
+				<ul class="pagination">
+				        {% if friends.has_previous %}
+				            <li class="list-group-item"><a href="?page={{ friends.previous_page_number }}">前一页</a></li>
+				        {% endif %}
+						{% for cnt in friends.paginator.page_range %}
+						{% if cnt != friends.number %}
+						<li class="page-item"><a class="page-link" href="?page={{ cnt }}">{{forloop.counter}}</a></li>
+						{% else %}
+						<li class="page-item active"><a class="page-link" href="?page={{ cnt }}">{{forloop.counter}}</a></li>
+						{% endif %}
+						{% endfor %}
+				        {% if friends.has_next %}
+				            <li class="list-group-item"><a href="?page={{ friends.next_page_number }}">后一页</a></li>
+				        {% endif %}
+				</ul>
+			</div>
+			{% include "voca_site/common_side_user_info.html" %}
+			
+			</div>
+
+      </div> <!-- /container -->
+		
+    </main>
+{% endblock %}

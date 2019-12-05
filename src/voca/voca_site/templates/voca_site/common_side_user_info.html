@@ -1,0 +1,50 @@
+{% load mytags %}
+
+<div class="col-md-4">
+  			<div class="card" style="width:100%">
+  				{% if pspage.user.gender == 1 %}
+			    <img class="card-img-top" src="/static/userimg/userMale.png" alt="Card image" style="width:100%">
+			    {% elif pspage.user.gender == 2 %}
+			    <img class="card-img-top" src="/static/userimg/userFemale.png" alt="Card image" style="width:100%">
+			    {% else %}
+			    <img class="card-img-top" src="/static/userimg/userdefault.png" alt="Card image" style="width:100%">
+			    {% endif %}
+			    <div class="card-body">
+			      <h4 class="card-title">{{ pspage.user.name }}
+			      {% if request.user in pspage.user.friend.all %}
+			      <span class="small"><mark>我的朋友</mark></span>
+			      {% endif %}</h4>
+			      <ul class="list-group list-group-flush">
+			      <h6 class="card-text">联系方式</h6>
+			      <li class="list-group-item">email: {{pspage.email}}</li>
+			      </ul>
+			      
+					<div class="pt-5">
+						{% if request.user != pspage.user %}
+						{% if request.user.is_authenticated %}
+						<button type="button" class="btn btn-primary " data-toggle="modal" data-target={{pspage.user.id|get_model_send_message_owner_target}}>发送消息</button>
+						{% include "voca_site/model_send_message.html" with model_id=pspage.user.id|get_model_send_message_owner_id action_url=request.user.my_pspage|get_send_message_url:pspage.user.id friend_name=pspage.user.name message_form=pspage|get_message_form_owner %}
+						{% if request.user not in pspage.user.friend.all %}
+						<button type="button" class="btn btn-primary " data-toggle="modal" data-target={{pspage.user.id|get_model_apply_friend_target}}>添加好友</button>
+						{% include "voca_site/model_apply_confirm.html" with model_id=pspage.user.id|get_model_apply_friend_id title="好友添加申请确认" body_content="你确认要添加吗" action_url=pspage|get_friend_apply_url %}
+					    {% endif %}
+					    {% endif %}
+					    <p class="card-text"><span class="badge badge-info">访客总量：{{pspage.visitor.all.count}}</span></p>
+					    {% else %}
+					   	<div class="list-group">
+					   		{% with url=pspage|get_pspage_update_url %}
+						  <a href="{{ url }}" class="list-group-item list-group-item-action">编辑个人页</a>
+						  <a href="{{ pspage.get_friend_url }}" class="list-group-item list-group-item-action">我的好友<span class="badge badge-pill"><small>共{{pspage.user.friend.all.count}}人</small></span></a>
+						  <a href="{{ pspage.get_message_url }}" class="list-group-item list-group-item-action">我的消息<span class="badge badge-primary badge-pill">{{pspage.get_message_set|get_unread_message_num}}</span></a>
+						  <a href="{{ pspage.get_visitor_detail_url }}" class="list-group-item list-group-item-action">我的访客<span class="badge badge-info">访客总量：{{pspage.visitor.all.count}}</span></a>	
+						  	{% endwith %}
+						</div>
+					    {% endif %}
+					  
+					</div>
+			      
+			      
+			    </div>
+			</div>
+
+       	 </div>

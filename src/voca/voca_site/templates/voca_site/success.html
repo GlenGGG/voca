@@ -1,0 +1,11 @@
+{% extends 'voca_site/base.html' %}
+{% block center_content %}
+	<div class="container .col-md-6 text-center jumbotron">
+		<lead>
+			<p>操作成功</p>
+			<p>单击下按钮转到你的个人页</p>
+		</lead>
+		<a class="btn btn-primary" href="{{ user.my_pspage.get_absolut_url }}" role="button">个人页</a>
+		
+	</div>
+{% endblock %}

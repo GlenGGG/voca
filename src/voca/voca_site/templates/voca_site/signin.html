@@ -1,0 +1,27 @@
+{% extends 'voca_site/base.html' %} {% block additional_links %}
+<link href="/static/myCss/login/login.css" rel="stylesheet">
+<link href="/static/myCss/footbar/stick_footbar.css" rel="stylesheet">
+{% endblock %} {% block center_content %}
+<form class="form-signin text-center" action='{% url "signin" %}' method='POST'>
+	
+	<img class="mb-4"
+		src="/static/logo/logo.svg"
+		alt="" width="116" height="72">
+	<h1 class="h3 mb-3 font-weight-normal">请登录</h1>
+	{% csrf_token %}
+	<table class="table vertical-align:middle">
+		{% for field in form %}
+			  <tr>
+			  	<th>{{ field.label_tag }}</th>
+			    <td>{{ field }}</td>
+			  </tr>
+			  {% if field.errors %}
+			  <tr>
+			    <td colspan=2 class="text-danger">{{ field.errors }}</td>
+			  </tr>
+			  {% endif %}
+		{% endfor %}
+	</table>
+	<button class="btn btn-lg btn-primary btn-block" type="submit">登陆</button>
+</form>
+{% endblock %}

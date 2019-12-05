@@ -1,0 +1,46 @@
+
+{% extends 'voca_site/base.html' %}
+{% block bootstrap_version_css %}
+<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+{% block additional_links %}
+<link href="/static/myCss/login/common_input.css" rel="stylesheet">
+<link href="/static/myCss/footbar/stick_footbar.css" rel="stylesheet">
+{% endblock %}
+{% block extra_style %}
+<style type="text/css">
+.mycontainer{
+margin-bottom: 14rem;
+}
+</style>
+{% endblock %}
+
+{% block center_content %}
+{% block navbar %}{% endblock %}
+{% load mytags %}
+{% with url=pspage|get_pspage_update_url %}
+<div class="mycontainer container mb-5">
+<form class="form-signin text-center" action='{{ url }}' method='POST'>
+	<a  href="{% url 'cover' %}">
+	<img
+		src="/static/logo/logo.svg"
+		alt="" width="116" height="72"></a>
+	<h1 class="h3 mb-3 font-weight-normal">请修改</h1>
+	{% csrf_token %}
+	<table class="table vertical-align:middle">
+		{{ form.as_table }}
+	</table>
+	<div class="btn-group" role="group">
+	  <button type="submit" class="btn btn-lg btn-primary">提交</button>
+	
+	<a tabindex="0" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" title="找不着？" data-content="如果你找不到你的大学，或职位，或公司等，请用你的注册邮箱给：wbh_19981254@outlook.com 发送邮件申请，我们会尽快为你添加的，请见谅。">找不着？</a>
+	  <a href="{{ pspage.get_absolut_url }}" class="btn btn-lg btn-primary">取消</a>
+	</div>
+</form>
+</div>
+{% endwith %}
+{% endblock %}
+
+{% block bootstrap_version_js %}
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+{% endblock %}

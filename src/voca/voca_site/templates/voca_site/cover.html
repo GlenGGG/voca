@@ -1,0 +1,35 @@
+{% extends 'voca_site\base.html' %} 
+{% block additional_links %}
+	<link href="/static/myCss/Cover/cover.css" rel="stylesheet">
+{% endblock %}
+ {% block navbar %}
+	<div class="cover-container text-center d-flex w-100 h-100 p-3 mx-auto flex-column">
+		<header class="masthead mb-auto">
+			<div class="inner">
+			{% include "voca_site/navbar.html" %}
+			</div>
+		</header>
+		{% endblock %} 
+		{% block center_content %}
+		<main role="main" class="inner cover">
+		<h1 class="cover-heading">Voca</h1>
+		<p class="lead">职场人际社交网站</p>
+		{% if user.is_anonymous %}
+		<p class="lead my-5">
+			<a href=" {% url 'signin' %} " class="btn btn-lg btn-secondary">登陆</a>
+			<a href="{% url 'signup' %}" class="btn btn-lg btn-secondary ml-5">注册</a>
+		</p>
+		{% else %}
+		<p class="lead my-5">
+			<a href="{{ user.my_pspage.get_absolut_url }}" class="btn btn-lg btn-secondary">个人页</a>
+		</p>
+		{% endif %}
+		</main>
+{% endblock %}
+{%block footbar%}
+		<div class="mastfoot mt-auto inner">
+		{% include "voca_site/footbar.html" %}
+		</div>
+	</div>
+{%endblock%}
+

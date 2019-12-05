@@ -1,0 +1,146 @@
+{% extends 'voca_site/base.html' %}
+{% load mytags %}
+{% block center_content %}
+	<main role="main">
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <div class="container mx-auto">
+          <h1 class="display-3">欢迎来到{{ pspage.user.name }}的个人页</h1>
+        </div>
+      </div>
+		
+      <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+          <div class="col-md-8">
+          	<div class="card flex-md-row mb-4 box-shadow h-md-250">
+			    <div class="card-body flex-column p-5">
+			      <h1 class="card-title pb-7"><mark>个人简介</h1>
+			      {% with set=pspage.info %}
+			      {% if set %}
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item">{{ set }}</li>
+			      </ul>
+			      {% else %}
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item">待完善</li>
+			      </ul>
+			      {% endif %}
+			      {% endwith %}
+			    </div>
+			 </div>
+			<div class="card flex-md-row mb-4 box-shadow h-md-250">
+			    <div class="card-body flex-column p-5">
+			      <h2 class="card-title pb-3">教育背景</h2>
+			      {% with set=pspage|get_set:"univs_attend" %}
+				  <h4 class="card-text pb-3">曾就读于：</h4>
+			      {% if set %}
+			      <ul class="list-group list-group-flush">
+			      {% for univs in set %}
+			      <li class="list-group-item">{{ univs.name }}
+			      		{% with enroll_time=univs|get_univs_enroll_time:pspage %}
+				      	{% if enroll_time %}
+				      	<p class="card-text small">入学时间：{{enroll_time|date:"Y-m-d"}}</p>
+				      	{% endif %}
+				      	{% endwith %}
+			      </li>
+			      {% endfor %}
+			      </ul>
+			      {% else %}
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item">待完善</li>
+			      </ul>
+			      {% endif %}
+			      {% endwith %}
+			      {% with set=pspage|get_set:"univs_gra" %}
+			      <h4 class="card-text pb-3 pt-4">毕业于：</h4>
+			      {% if set %}
+			      {% for univs in set %}
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item">{{ univs.name }}
+			      		{% with grad_time=univs|get_univs_grad_time:pspage %}
+				      	{% if grad_time %}
+				      	<p class="card-text small">入学时间：{{grad_time|date:"Y-m-d"}}</p>
+				      	{% endif %}
+				      	{% endwith %}
+			      </li>
+			      {% endfor %}
+			      </ul>
+			      {% else %}
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item">待完善</li>
+			      </ul>
+			      {% endif %}
+			      {% endwith %}
+			    </div>
+			 </div>
+			 <div class="card flex-md-row mb-4 box-shadow h-md-250">
+			    <div class="card-body flex-column p-5">
+			      <h2 class="card-title pb-3">职位</h2>
+			      {% with set=pspage|get_set:"position" %}
+			      {% if set %}
+			      <h4 class="card-text pb-3 pt-4">在职：</h4>
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item">{{ set.name }}</li>
+			      </ul>
+			      {% elif pspage.joborein %}
+			      <h4 class="card-text pb-3 pt-4">就职意向：</h4>
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item">{{ pspage.joborein }}</li>
+			      </ul>
+			      {% else %}
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item">待完善</li>
+			      </ul>
+			      {% endif %}
+			      {% endwith %}
+			    </div>
+			 </div>
+			 
+			 <div class="card flex-md-row mb-4 box-shadow h-md-250">
+			    <div class="card-body flex-column p-5">
+			      <h2 class="card-title pb-3">所属组织</h2>
+			      {% with set=pspage|get_set:"orgniza" %}
+			      {% if set %}
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item">{{ set.name }}</li>
+			      </ul>
+			      {% else %}
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item">待完善</li>
+			      </ul>
+			      {% endif %}
+			      {% endwith %}
+			    </div>
+			 </div>
+			 
+			  <div class="card flex-md-row mb-4 box-shadow h-md-250">
+			    <div class="card-body flex-column p-5">
+			      <h2 class="card-title pb-3">所属部门</h2>
+			      {% with set=pspage|get_set:"depart" %}
+			      {% if set %}
+			      <ul class="list-group list-group-flush">
+			      
+			      <li class="list-group-item"><h4 class="card-text pb-3 pt-4">{{ set.name }}</h4></li>
+			      {% if set.location %}
+			      <li class="list-group-item">{{ set.location }}</li>
+			      {% endif %}
+			      </ul>
+			      {% else %}
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item">待完善</li>
+			      </ul>
+			      {% endif %}
+			      {% endwith %}
+			    </div>
+			 </div>
+			 
+          </div>
+          {% include "voca_site/common_side_user_info.html" %}
+        </div>
+
+
+      </div> <!-- /container -->
+
+    </main>
+{% endblock %}

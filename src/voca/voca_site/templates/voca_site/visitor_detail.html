@@ -1,0 +1,68 @@
+{% extends 'voca_site/base.html' %}
+
+{% load mytags %}
+{% block center_content %}
+	<main role="main">
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <div class="container mx-auto">
+          <h1 class="display-3">{{ pspage.user.name }}的个人页访问者</h1>
+        </div>
+      </div>
+		
+      <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+          <div class="col-md-8">
+          	<div class="card flex-md-row mb-4 box-shadow h-md-250">
+			    <div class="card-body flex-column p-5">
+			      <h1 class="card-title pb-7"><mark>访问者</mark></h1>
+			      {% if visits %}
+			      {% for visit in visits %}
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item"><p class="card-text lead">{{ visit.user.name }}</p></li>
+			      <li class="list-group-item">{{ visit.user.my_pspage.email }}</li>
+			      <li class="list-group-item">访问时间：{{ visit.visit_time }}</li>
+			      	<li class="list-group-item">
+					<span class="btn-group pt-2">
+					  <button type="button" class="btn btn-primary " data-toggle="modal" data-target={{visit.user.id|get_model_send_message_target}}>发个消息</button>
+					  <a href="{{ visit.user.my_pspage.get_absolut_url }}" class="btn btn-secondary">查看他的个人页</a>
+					</span>
+			      	</li>
+			      {% include "voca_site/model_send_message.html" with model_id=visit.user.id|get_model_send_message_id action_url=pspage|get_send_message_url:visit.user.id friend_name=visit.user.name message_form=message_forms|get_message_form:forloop.counter %}
+			      
+			      {% endfor %}
+			      
+			      </ul>
+			      {% else %}
+			      <ul class="list-group list-group-flush">
+			      <li class="list-group-item">尚无访问者</li>
+			      </ul>
+			      
+			      {% endif %}
+			    </div>
+			 </div>
+				<ul class="pagination">
+				        {% if visits.has_previous %}
+				            <li class="list-group-item"><a href="?page={{ visits.previous_page_number }}">前一页</a></li>
+				        {% endif %}
+						{% for cnt in visits.paginator.page_range %}
+						{% if cnt != visits.number %}
+						<li class="page-item"><a class="page-link" href="?page={{ cnt }}">{{forloop.counter}}</a></li>
+						{% else %}
+						<li class="page-item active"><a class="page-link" href="?page={{ cnt }}">{{forloop.counter}}</a></li>
+						{% endif %}
+						{% endfor %}
+				        {% if visits.has_next %}
+				            <li class="list-group-item"><a href="?page={{ visits.next_page_number }}">后一页</a></li>
+				        {% endif %}
+				</ul>
+			</div>
+			{% include "voca_site/common_side_user_info.html" %}
+			
+			</div>
+
+      </div> <!-- /container -->
+		
+    </main>
+{% endblock %}
